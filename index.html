@@ -2,201 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Send and Receive Anonymous Notes Online | ShareANote</title>
-  <meta name="description" content="ShareANote lets you send and receive anonymous notes online securely and privately. No login, no tracking—just a safe place to share messages anonymously." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- Open Graph / Social Sharing -->
-  <meta property="og:title" content="Send and Receive Anonymous Notes Online | ShareANote" />
-  <meta property="og:description" content="ShareANote lets you send and receive anonymous notes online securely and privately. No login, no tracking—just a safe place to share messages anonymously." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://www.shareanote.com" />
-  <meta property="og:image" content="https://www.shareanote.com/share-image.png" />
+  <!-- Google Site Verification -->
+  <meta name="google-site-verification" content="dpSAoGMlm3s0Tnk7cwxmFUjMJo0Jr29okSScq8FahWU" />
 
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Send and Receive Anonymous Notes Online | ShareANote" />
-  <meta name="twitter:description" content="ShareANote lets you send and receive anonymous notes online securely and privately. No login, no tracking—just a safe place to share messages anonymously." />
-  <meta name="twitter:image" content="https://www.shareanote.com/share-image.png" />
-
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
+  <title>Share a Note | Send or Receive Notes Anonymously</title>
+  <meta name="description" content="ShareANote.com lets you send or receive anonymous notes online. No login. No tracking. Just a simple, private way to share messages.">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    /* Reset */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    body {
-      font-family: 'Orbitron', sans-serif;
-      background: radial-gradient(circle at top left, #0f172a, #020617);
-      color: #e0f2fe;
-      text-align: center;
-      scroll-behavior: smooth;
-    }
-
-    header {
-      padding: 100px 20px 60px;
-      background: linear-gradient(to right, #0ea5e9, #3b82f6);
-      color: #ffffff;
-      box-shadow: 0 0 30px rgba(56, 189, 248, 0.4);
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Animated Background Circles */
-    header::before, header::after {
-      content: "";
-      position: absolute;
-      border-radius: 50%;
-      opacity: 0.2;
-      animation: pulse 8s infinite alternate ease-in-out;
-      z-index: 0;
-    }
-    header::before {
-      width: 300px;
-      height: 300px;
-      background: #38bdf8;
-      top: -100px;
-      left: -100px;
-    }
-    header::after {
-      width: 500px;
-      height: 500px;
-      background: #3b82f6;
-      bottom: -250px;
-      right: -250px;
-      animation-delay: 4s;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: 0.2; }
-      100% { transform: scale(1.3); opacity: 0.35; }
-    }
-
-    h1 {
-      font-size: 3.5rem;
-      margin-bottom: 20px;
-      text-shadow: 2px 2px #1e3a8a;
-      position: relative;
-      z-index: 1;
-    }
-
-    p.subtitle {
-      font-size: 1.5rem;
-      margin-bottom: 40px;
-      color: #dbeafe;
-      position: relative;
-      z-index: 1;
-    }
-
-    textarea {
-      width: 90%;
-      max-width: 600px;
-      height: 160px;
-      padding: 20px;
-      font-size: 1.1rem;
-      border: 2px solid #38bdf8;
-      border-radius: 12px;
-      background: #1e293b;
-      color: #e0f2fe;
-      resize: none;
-      box-shadow: 0 0 10px #38bdf8;
-      position: relative;
-      z-index: 1;
-    }
-
-    button {
-      margin-top: 20px;
-      padding: 15px 30px;
-      font-size: 1rem;
-      background: #38bdf8;
-      color: #0f172a;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-      box-shadow: 0 0 12px #38bdf8;
-      overflow: hidden;
-      position: relative;
-      z-index: 1;
-    }
-
-    button:hover {
-      background: #0ea5e9;
-    }
-
-    /* Ripple effect animation */
-    button .ripple {
-      position: absolute;
-      border-radius: 50%;
-      transform: scale(0);
-      animation: ripple 600ms linear;
-      background-color: rgba(255, 255, 255, 0.7);
-      pointer-events: none;
-      z-index: 2;
-    }
-
-    @keyframes ripple {
-      to {
-        transform: scale(4);
-        opacity: 0;
-      }
-    }
-
-    section#about {
-      padding: 80px 20px;
-      background: #0f172a;
-      border-top: 2px solid #1e40af;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    section#about.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    section#about h2 {
-      font-size: 2.5rem;
-      margin-bottom: 20px;
-      color: #60a5fa;
-      text-shadow: 1px 1px #1e3a8a;
-    }
-
-    section#about p {
-      font-size: 1.2rem;
-      max-width: 800px;
-      margin: 0 auto 20px;
-      line-height: 1.7;
-      color: #cbd5e1;
-    }
-
-    footer {
-      padding: 40px 20px;
-      font-size: 0.9rem;
-      color: #94a3b8;
-      background: #020617;
-      border-top: 1px solid #1e3a8a;
-    }
-
-    /* Link styled button to About */
-    .about-link {
-      display: inline-block;
-      margin-top: 30px;
-      font-size: 1rem;
-      color: #dbeafe;
-      cursor: pointer;
-      text-decoration: underline;
-      position: relative;
-      z-index: 1;
-    }
-    .about-link:hover {
-      color: #60a5fa;
-    }
+    /* your existing styles here */
   </style>
 </head>
 <body>
@@ -204,63 +19,23 @@
   <header>
     <h1>Share a Note</h1>
     <p class="subtitle">Send or receive anonymous notes. No login. Just human connection.</p>
-    <textarea placeholder="Write your anonymous note here..."></textarea><br />
-    <button id="sendBtn">Send Note</button>
-    <div><a href="#about" class="about-link">Learn more about ShareANote</a></div>
+    <textarea placeholder="Write your anonymous note here..."></textarea><br>
+    <button onclick="alert('Note sent anonymously!')">Send Note</button>
   </header>
 
-  <section id="about" aria-label="About ShareANote">
-    <h2>About ShareANote - Anonymous Note Sharing Platform</h2>
+  <section id="about">
+    <h2>About ShareANote</h2>
     <p>
-      ShareANote.com is a secure and anonymous online platform to send and receive notes privately. Our service provides a fast and easy way to share messages without accounts, email, or tracking.
+      ShareANote.com is a futuristic, anonymous platform for digital note sharing. No accounts, no tracking—just a fast and private way to send or receive messages from anyone, anywhere.
     </p>
     <p>
-      Whether you want to send anonymous encouragement, secret notes, or simple thoughts, ShareANote protects your privacy while fostering genuine human connection. Experience safe and anonymous messaging, designed for your peace of mind.
+      Our clean, secure space empowers you to share thoughts, encouragement, or surprises with total freedom. Enjoy a unique, human connection in a modern, minimal way.
     </p>
   </section>
 
   <footer>
     &copy; 2025 ShareANote.com — All rights reserved.
   </footer>
-
-  <script>
-    // Ripple effect on button
-    const button = document.getElementById('sendBtn');
-    button.addEventListener('click', function(e) {
-      const circle = document.createElement('span');
-      circle.classList.add('ripple');
-      const rect = button.getBoundingClientRect();
-      const size = Math.max(rect.width, rect.height);
-      circle.style.width = circle.style.height = size + 'px';
-      circle.style.left = e.clientX - rect.left - size / 2 + 'px';
-      circle.style.top = e.clientY - rect.top - size / 2 + 'px';
-      button.appendChild(circle);
-      setTimeout(() => circle.remove(), 600);
-      // Placeholder for actual send logic
-      alert('Note sent! (This is a demo alert)');
-    });
-
-    // Fade-in animation on scroll for About section
-    function isInViewport(element) {
-      const rect = element.getBoundingClientRect();
-      return (
-        rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 0.9
-      );
-    }
-
-    const aboutSection = document.getElementById('about');
-
-    function checkFadeIn() {
-      if (isInViewport(aboutSection)) {
-        aboutSection.classList.add('visible');
-        window.removeEventListener('scroll', checkFadeIn);
-      }
-    }
-
-    window.addEventListener('scroll', checkFadeIn);
-    // Initial check in case it's already in viewport
-    checkFadeIn();
-  </script>
 
 </body>
 </html>
