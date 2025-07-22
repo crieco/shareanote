@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ShareANote.com | Pass Notes Online - Leave a Note & Receive One Instantly</title>
+  <meta name="description" content="Pass notes online anonymously with ShareANote.com. Easily leave a note, receive a note, and share digital messages—no sign-up needed for instant note sharing." />
+  <meta name="keywords" content="leave a note online, pass notes online, anonymous note sharing, write a note, digital note passing" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background: #f9faff;
+      color: #222;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      background-color: #4a90e2;
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      user-select: none;
+    }
+    main {
+      flex: 1;
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+      text-align: center;
+    }
+    h1 {
+      font-size: 2.2rem;
+      margin-bottom: 0.3rem;
+    }
+    p.subtitle {
+      font-size: 1.1rem;
+      color: #555;
+      margin-top: 0;
+      margin-bottom: 2rem;
+    }
+    textarea {
+      width: 100%;
+      min-height: 100px;
+      padding: 0.75rem;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      resize: vertical;
+      box-sizing: border-box;
+      margin-bottom: 1rem;
+    }
+    button {
+      background-color: #4a90e2;
+      border: none;
+      color: white;
+      padding: 0.75rem 2rem;
+      font-size: 1.1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      user-select: none;
+    }
+    button:hover, button:focus {
+      background-color: #357ABD;
+      outline: none;
+    }
+    #receivedNote {
+      background: #eef4fc;
+      border-left: 4px solid #4a90e2;
+      padding: 1rem 1.25rem;
+      font-style: italic;
+      margin-top: 2rem;
+      border-radius: 6px;
+      min-height: 80px;
+      color: #333;
+      white-space: pre-wrap;
+    }
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #888;
+      user-select: none;
+    }
+    .note-limit {
+      font-size: 0.85rem;
+      color: #888;
+      margin-bottom: 0.5rem;
+      text-align: right;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    ShareANote.com
+  </header>
+  <main>
+    <h1>Leave a Note, Take a Note</h1>
+    <p class="subtitle">Write a note below and receive a note left by someone else instantly — no sign-up needed!</p>
+    
+    <form id="noteForm" autocomplete="off">
+      <div class="note-limit">Max 280 characters</div>
+      <textarea id="noteInput" maxlength="280" placeholder="Write your note here..."></textarea>
+      <br />
+      <button type="submit">Send My Note & Receive One</button>
+    </form>
+    
+    <div id="receivedNote" aria-live="polite" role="region" style="display:none;"></div>
+  </main>
+  <footer>
+    &copy; 2025 ShareANote.com — Pass notes online anonymously and effortlessly.
+  </footer>
+  
+  <script>
+    // Simulated backend with a simple local notes array
+    let notesDatabase = [
+      "Be kind, even to strangers.",
+      "Every note is a new connection.",
+      "You never know who needs to hear this today.",
+      "Leave a little light in the world.",
+      "A simple note can change someone's day.",
+      "Kindness is contagious—pass it on!",
+      "Your words have power. Use them wisely.",
+      "Hello from a stranger who cares.",
+      "Smile! Someone is thinking of you.",
+      "Keep shining, no matter what."
+    ];
+
+    const noteForm = document.getElementById('noteForm');
+    const noteInput = document.getElementById('noteInput');
+    const receivedNoteDiv = document.getElementById('receivedNote');
+
+    function getRandomNote(excludeNote = '') {
+      const filteredNotes = notesDatabase.filter(n => n !== excludeNote);
+      if (filteredNotes.length === 0) return "No notes available right now. Try again soon!";
+      const randomIndex = Math.floor(Math.random() * filteredNotes.length);
+      return filteredNotes[randomIndex];
+    }
+
+    noteForm.addEventListener('submit', e => {
+      e.preventDefault();
+      const userNote = noteInput.value.trim();
+      if (!userNote) {
+        alert('Please write a note before submitting.');
+        return;
+      }
+      if (userNote.length > 280) {
+        alert('Your note exceeds the 280 character limit.');
+        return;
+      }
+
+      // Add user's note to the "database"
+      notesDatabase.push(userNote);
+
+      // Get a random note not equal to user's note
+      const noteToShow = getRandomNote(userNote);
+
+      // Show received note
+      receivedNoteDiv.style.display = 'block';
+      receivedNoteDiv.textContent = noteToShow;
+
+      // Clear textarea
+      noteInput.value = '';
+      noteInput.focus();
+    });
+  </script>
+</body>
+</html>
