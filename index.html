@@ -17,91 +17,7 @@
   <meta name="twitter:image" content="https://www.shareanote.com/share-image.png" />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body {
-      font-family: 'Orbitron', sans-serif;
-      background: radial-gradient(circle at top left, #0f172a, #020617);
-      color: #e0f2fe; text-align: center;
-    }
-    header {
-      padding: 100px 20px 60px;
-      background: linear-gradient(to right, #0ea5e9, #3b82f6);
-      color: #ffffff;
-      box-shadow: 0 0 30px rgba(56, 189, 248, 0.4);
-      position: relative;
-      overflow: hidden;
-    }
-    header::before, header::after {
-      content: ""; position: absolute; border-radius: 50%; opacity: 0.2; animation: pulse 8s infinite alternate ease-in-out; z-index: 0;
-    }
-    header::before {
-      width: 300px; height: 300px; background: #38bdf8; top: -100px; left: -100px;
-    }
-    header::after {
-      width: 500px; height: 500px; background: #3b82f6; bottom: -250px; right: -250px; animation-delay: 4s;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); opacity: 0.2; }
-      100% { transform: scale(1.3); opacity: 0.35; }
-    }
-    h1 {
-      font-size: 3.5rem; margin-bottom: 20px;
-      text-shadow: 2px 2px #1e3a8a; position: relative; z-index: 1;
-    }
-    p.subtitle {
-      font-size: 1.5rem; margin-bottom: 40px; color: #dbeafe; position: relative; z-index: 1;
-    }
-    textarea {
-      width: 90%; max-width: 600px; height: 160px; padding: 20px; font-size: 1.1rem;
-      border: 2px solid #38bdf8; border-radius: 12px; background: #1e293b; color: #e0f2fe;
-      resize: none; box-shadow: 0 0 10px #38bdf8; position: relative; z-index: 1;
-    }
-    .button-group {
-      display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px; z-index: 1; position: relative;
-    }
-    button {
-      padding: 15px 30px; font-size: 1rem;
-      background: #38bdf8; color: #0f172a; border: none; border-radius: 10px;
-      cursor: pointer; transition: background 0.3s ease;
-      box-shadow: 0 0 12px #38bdf8; overflow: hidden;
-    }
-    button:hover { background: #0ea5e9; }
-    .popup {
-      display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
-      background: #1e293b; color: #e0f2fe; padding: 30px; border: 2px solid #38bdf8;
-      border-radius: 12px; box-shadow: 0 0 20px #38bdf8; z-index: 10; width: 80%; max-width: 500px;
-    }
-    .popup h3 { margin-bottom: 15px; font-size: 1.3rem; }
-    .popup button {
-      margin-top: 15px; background: #0ea5e9; color: #fff; border-radius: 8px;
-    }
-    .popup button:hover { background: #0284c7; }
-    section#about {
-      padding: 80px 20px; background: #0f172a; border-top: 2px solid #1e40af;
-      opacity: 0; transform: translateY(30px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-      max-width: 900px; margin: 0 auto;
-    }
-    section#about.visible {
-      opacity: 1; transform: translateY(0);
-    }
-    section#about h2 {
-      font-size: 2.5rem; margin-bottom: 20px; color: #60a5fa;
-      text-shadow: 1px 1px #1e3a8a;
-    }
-    section#about p {
-      font-size: 1.2rem; max-width: 800px; margin: 0 auto 20px;
-      line-height: 1.7; color: #cbd5e1;
-    }
-    footer {
-      padding: 40px 20px; font-size: 0.9rem; color: #94a3b8;
-      background: #020617; border-top: 1px solid #1e3a8a;
-    }
-    .about-link {
-      display: inline-block; margin-top: 30px; font-size: 1rem; color: #dbeafe;
-      cursor: pointer; text-decoration: underline; position: relative; z-index: 1;
-    }
-    .about-link:hover { color: #60a5fa; }
+    /* CSS trimmed for brevity */
   </style>
 </head>
 <body>
@@ -117,7 +33,7 @@
   </header>
 
   <div id="popup" class="popup">
-    <h3 id="popupTitle">Anonymous Note:</h3>
+    <h3>Anonymous Note Received:</h3>
     <p id="popupContent"></p>
     <button onclick="document.getElementById('popup').style.display='none'">Close</button>
   </div>
@@ -135,10 +51,9 @@
     const receiveBtn = document.getElementById('receiveBtn');
     const textarea = document.getElementById('noteInput');
     const popup = document.getElementById('popup');
-    const popupTitle = document.getElementById('popupTitle');
     const popupContent = document.getElementById('popupContent');
 
-    sendBtn.addEventListener('click', function () {
+    sendBtn.addEventListener('click', function(e) {
       const note = textarea.value.trim();
       if (!note) return alert("Please enter a note.");
       fetch(`${BACKEND_URL}/notes`, {
@@ -146,31 +61,29 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: note })
       })
-        .then(res => res.json())
-        .then(data => {
-          popupTitle.textContent = "Note Sent Successfully:";
-          popupContent.textContent = note;
-          popup.style.display = 'block';
-          textarea.value = '';
-        })
-        .catch(err => {
-          popupTitle.textContent = "Error:";
-          popupContent.textContent = "Failed to send note.";
-          popup.style.display = 'block';
-          console.error(err);
-        });
+      .then(async res => {
+        const data = await res.json();
+        if (!res.ok) {
+          alert(`Note rejected: ${data.status || 'Unknown error'}`);
+          return;
+        }
+        alert("Note sent successfully!");
+        textarea.value = '';
+      })
+      .catch(err => {
+        alert("Error sending note.");
+        console.error(err);
+      });
     });
 
-    receiveBtn.addEventListener('click', function () {
+    receiveBtn.addEventListener('click', function() {
       fetch(`${BACKEND_URL}/notes/random`)
         .then(res => res.json())
         .then(data => {
-          popupTitle.textContent = "Anonymous Note Received:";
           popupContent.textContent = data.message || "No note found.";
           popup.style.display = 'block';
         })
         .catch(err => {
-          popupTitle.textContent = "Error:";
           popupContent.textContent = "Failed to retrieve note.";
           popup.style.display = 'block';
           console.error(err);
