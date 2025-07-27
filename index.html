@@ -4,25 +4,16 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="google-site-verification" content="dpSAoGMlm3s0Tnk7cwxmFUjMJo0Jr29okSScq8FahWU" />
-  <title>Send and Receive Anonymous Notes Online | ShareANote</title>
-  <meta name="description" content="ShareANote lets you send and receive anonymous notes online securely and privately. No login, no tracking—just a safe place to share messages anonymously." />
-  <meta property="og:title" content="Send and Receive Anonymous Notes Online | ShareANote" />
-  <meta property="og:description" content="ShareANote lets you send and receive anonymous notes online securely and privately. No login, no tracking—just a safe place to share messages anonymously." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://www.shareanote.com" />
-  <meta property="og:image" content="https://www.shareanote.com/share-image.png" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Send and Receive Anonymous Notes Online | ShareANote" />
-  <meta name="twitter:description" content="ShareANote lets you send and receive anonymous notes online securely and privately. No login, no tracking—just a safe place to share messages anonymously." />
-  <meta name="twitter:image" content="https://www.shareanote.com/share-image.png" />
+  <title>Send and Receive Anonymous Notes | ShareANote</title>
+  <meta name="description" content="ShareANote lets you send and receive anonymous notes online securely, privately, and anonymously. No login, no tracking — just human connection." />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Orbitron', sans-serif;
       background: radial-gradient(circle at top left, #0f172a, #020617);
-      color: #e0f2fe; text-align: center;
+      color: #e0f2fe;
+      text-align: center;
     }
     header {
       padding: 100px 20px 60px;
@@ -67,6 +58,7 @@
       box-shadow: 0 0 12px #38bdf8; overflow: hidden;
     }
     button:hover { background: #0ea5e9; }
+
     .popup {
       display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
       background: #1e293b; color: #e0f2fe; padding: 30px; border: 2px solid #38bdf8;
@@ -77,6 +69,7 @@
       margin-top: 15px; background: #0ea5e9; color: #fff; border-radius: 8px;
     }
     .popup button:hover { background: #0284c7; }
+
     section#about {
       padding: 80px 20px; background: #0f172a; border-top: 2px solid #1e40af;
       opacity: 0; transform: translateY(30px);
@@ -112,16 +105,17 @@
   </header>
 
   <div id="popup" class="popup">
-    <h3>Anonymous Note:</h3>
+    <h3 id="popupTitle">Anonymous Note</h3>
     <p id="popupContent"></p>
     <button onclick="document.getElementById('popup').style.display='none'">Close</button>
   </div>
 
   <section id="about">
-    <h2>About ShareANote - Anonymous Note Sharing Platform</h2>
-    <p>ShareANote is a modern digital space for anonymous expression, empowering users to share their thoughts and feelings without fear of judgment or surveillance.</p>
-    <p>Whether you're offering encouragement, seeking connection, or just expressing what's on your mind, ShareANote provides a safe, private, and secure environment. No accounts, no tracking, no ads—just a clean space where your words can matter.</p>
-    <p>Our platform uses smart filters to prevent abusive content and limit spam, ensuring that every message contributes positively. Built with modern design, real-time database functionality, and anonymous sharing in mind, ShareANote is ideal for community connection, emotional release, and digital kindness.</p>
+    <h2>About ShareANote</h2>
+    <p>ShareANote.com is a secure, anonymous, and human-centered online platform that allows you to share and receive notes with others around the world.</p>
+    <p>Built with privacy and empathy in mind, ShareANote is perfect for spreading encouragement, expressing hidden thoughts, or simply making someone’s day—without revealing your identity. No login required. No tracking. Just connection, clarity, and compassion.</p>
+    <p>Use ShareANote to share messages of hope, surprise strangers with kind words, or even vent anonymously in a safe digital space. Our platform is protected with profanity, threat, and spam detection to maintain a respectful environment for all users.</p>
+    <p>Everything is stored securely and filtered responsibly to ensure the site stays meaningful, positive, and abuse-free. ShareANote is the internet’s easiest way to share a human moment in a digital world.</p>
   </section>
 
   <footer>&copy; 2025 ShareANote.com — All rights reserved.</footer>
@@ -132,11 +126,18 @@
     const receiveBtn = document.getElementById('receiveBtn');
     const textarea = document.getElementById('noteInput');
     const popup = document.getElementById('popup');
+    const popupTitle = document.getElementById('popupTitle');
     const popupContent = document.getElementById('popupContent');
 
-    sendBtn.addEventListener('click', function(e) {
+    function showPopup(title, message) {
+      popupTitle.textContent = title;
+      popupContent.textContent = message;
+      popup.style.display = 'block';
+    }
+
+    sendBtn.addEventListener('click', () => {
       const note = textarea.value.trim();
-      if (!note) return alert("Please enter a note.");
+      if (!note) return showPopup("Error", "Please enter a note.");
       fetch(`${BACKEND_URL}/notes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -144,30 +145,27 @@
       })
       .then(res => res.json())
       .then(data => {
-        if (data.status && data.status !== 'success') {
-          alert(`Submission blocked: ${data.status}`);
-        } else {
-          popupContent.textContent = 'Your anonymous note has been sent!';
-          popup.style.display = 'block';
+        if (data.status === 'success') {
           textarea.value = '';
+          showPopup("Note Sent", "Note sent successfully!");
+        } else {
+          showPopup("Note Rejected", data.status || "Error sending note.");
         }
       })
       .catch(err => {
-        alert("Error sending note.");
+        showPopup("Error", "Failed to send note.");
         console.error(err);
       });
     });
 
-    receiveBtn.addEventListener('click', function() {
+    receiveBtn.addEventListener('click', () => {
       fetch(`${BACKEND_URL}/notes/random`)
         .then(res => res.json())
         .then(data => {
-          popupContent.textContent = data.message || "No note found.";
-          popup.style.display = 'block';
+          showPopup("Note Received", data.message || "No note found.");
         })
         .catch(err => {
-          popupContent.textContent = "Failed to retrieve note.";
-          popup.style.display = 'block';
+          showPopup("Error", "Failed to retrieve note.");
           console.error(err);
         });
     });
