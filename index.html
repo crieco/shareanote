@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -56,21 +57,26 @@
       border: 2px solid #38bdf8; border-radius: 12px; background: #1e293b; color: #e0f2fe;
       resize: none; box-shadow: 0 0 10px #38bdf8; position: relative; z-index: 1;
     }
+    .button-group {
+      display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 20px; z-index: 1; position: relative;
+    }
     button {
-      margin-top: 20px; padding: 15px 30px; font-size: 1rem;
+      padding: 15px 30px; font-size: 1rem;
       background: #38bdf8; color: #0f172a; border: none; border-radius: 10px;
       cursor: pointer; transition: background 0.3s ease;
-      box-shadow: 0 0 12px #38bdf8; overflow: hidden; position: relative; z-index: 1;
+      box-shadow: 0 0 12px #38bdf8; overflow: hidden;
     }
     button:hover { background: #0ea5e9; }
-    button .ripple {
-      position: absolute; border-radius: 50%; transform: scale(0);
-      animation: ripple 600ms linear; background-color: rgba(255, 255, 255, 0.7);
-      pointer-events: none; z-index: 2;
+    .popup {
+      display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%);
+      background: #1e293b; color: #e0f2fe; padding: 30px; border: 2px solid #38bdf8;
+      border-radius: 12px; box-shadow: 0 0 20px #38bdf8; z-index: 10; width: 80%; max-width: 500px;
     }
-    @keyframes ripple {
-      to { transform: scale(4); opacity: 0; }
+    .popup h3 { margin-bottom: 15px; font-size: 1.3rem; }
+    .popup button {
+      margin-top: 15px; background: #0ea5e9; color: #fff; border-radius: 8px;
     }
+    .popup button:hover { background: #0284c7; }
     section#about {
       padding: 80px 20px; background: #0f172a; border-top: 2px solid #1e40af;
       opacity: 0; transform: translateY(30px);
@@ -104,30 +110,35 @@
     <h1>Share a Note</h1>
     <p class="subtitle">Send or receive anonymous notes. No login. Just human connection.</p>
     <textarea placeholder="Write your anonymous note here..." id="noteInput"></textarea><br />
-    <button id="sendBtn">Send Note</button>
+    <div class="button-group">
+      <button id="sendBtn">Send Note</button>
+      <button id="receiveBtn">Receive Note</button>
+    </div>
     <div><a href="#about" class="about-link">Learn more about ShareANote</a></div>
   </header>
+
+  <div id="popup" class="popup">
+    <h3>Anonymous Note Received:</h3>
+    <p id="popupContent"></p>
+    <button onclick="document.getElementById('popup').style.display='none'">Close</button>
+  </div>
+
   <section id="about">
     <h2>About ShareANote - Anonymous Note Sharing Platform</h2>
     <p>ShareANote.com is a secure and anonymous online platform to send and receive notes privately.</p>
     <p>Whether you want to send anonymous encouragement, secret notes, or simple thoughts, ShareANote protects your privacy.</p>
   </section>
   <footer>&copy; 2025 ShareANote.com — All rights reserved.</footer>
-  <script>
-    const BACKEND_URL = 'https://shareanote-backend.onrender.com';
-    const button = document.getElementById('sendBtn');
-    const textarea = document.getElementById('noteInput');
-    button.addEventListener('click', function(e) {
-      const circle = document.createElement('span');
-      circle.classList.add('ripple');
-      const rect = button.getBoundingClientRect();
-      const size = Math.max(rect.width, rect.height);
-      circle.style.width = circle.style.height = size + 'px';
-      circle.style.left = e.clientX - rect.left - size / 2 + 'px';
-      circle.style.top = e.clientY - rect.top - size / 2 + 'px';
-      button.appendChild(circle);
-      setTimeout(() => circle.remove(), 600);
 
+  <script>
+    const BACKEND_URL = 'https://shareanote-mongo.onrender.com';
+    const sendBtn = document.getElementById('sendBtn');
+    const receiveBtn = document.getElementById('receiveBtn');
+    const textarea = document.getElementById('noteInput');
+    const popup = document.getElementById('popup');
+    const popupContent = document.getElementById('popupContent');
+
+    sendBtn.addEventListener('click', function(e) {
       const note = textarea.value.trim();
       if (!note) return alert("Please enter a note.");
       fetch(`${BACKEND_URL}/notes`, {
@@ -145,6 +156,21 @@
         console.error(err);
       });
     });
+
+    receiveBtn.addEventListener('click', function() {
+      fetch(`${BACKEND_URL}/notes/random`)
+        .then(res => res.json())
+        .then(data => {
+          popupContent.textContent = data.message || "No note found.";
+          popup.style.display = 'block';
+        })
+        .catch(err => {
+          popupContent.textContent = "Failed to retrieve note.";
+          popup.style.display = 'block';
+          console.error(err);
+        });
+    });
+
     function isInViewport(element) {
       const rect = element.getBoundingClientRect();
       return rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 0.9;
