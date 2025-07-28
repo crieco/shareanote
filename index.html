@@ -6,15 +6,26 @@
   <title>Share A Note – Send & Receive Anonymous Messages Instantly</title>
   <meta name="description" content="Share A Note is a secure, anonymous platform to send and receive notes instantly with no login or tracking. A safe space for connection, clarity, and compassion." />
   <meta name="robots" content="index, follow" />
+  <meta name="keywords" content="anonymous notes, share a note, no login messages, private messaging, anonymous message board, safe messaging, secure notes" />
   <meta name="author" content="Share A Note Team" />
   <meta name="theme-color" content="#0f172a" />
+  <meta name="color-scheme" content="dark light" />
   <meta name="google-site-verification" content="google4179691d1eb22dd9" />
   <link rel="canonical" href="https://shareanote.com/" />
-  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
-  <link rel="manifest" href="/site.webmanifest" />
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet" />
 
-  <!-- Open Graph Meta Tags -->
+  <!-- Icons -->
+  <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <!-- Preconnect & Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap"></noscript>
+
+  <!-- Open Graph -->
   <meta property="og:title" content="Share A Note – Send Anonymous Messages Instantly" />
   <meta property="og:description" content="Send and receive anonymous messages with no login, no tracking—just connection." />
   <meta property="og:url" content="https://shareanote.com/" />
@@ -22,14 +33,14 @@
   <meta property="og:image" content="https://shareanote.com/social-preview.jpg" />
   <meta property="og:site_name" content="Share A Note" />
 
-  <!-- Twitter Card Tags -->
+  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Share A Note – Send Anonymous Messages Instantly" />
   <meta name="twitter:description" content="Send and receive anonymous notes online with no login or tracking." />
   <meta name="twitter:image" content="https://shareanote.com/social-preview.jpg" />
   <meta name="twitter:site" content="@ShareANote" />
 
-  <!-- Schema Markup -->
+  <!-- Structured Data -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -45,9 +56,13 @@
   }
   </script>
 
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <!-- Confetti -->
+  <link rel="preload" href="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" as="script">
+  <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
     body {
       font-family: 'Orbitron', sans-serif;
       color: #e0f7ff;
@@ -80,6 +95,12 @@
       max-width: 600px;
       color: #a5f3fc;
     }
+
+    @media (max-width: 500px) {
+      h1 { font-size: 2.5rem; }
+      .subtitle { font-size: 1.2rem; }
+    }
+
     label {
       display: block;
       margin: 0 auto 10px;
@@ -114,9 +135,15 @@
       font-size: 1rem;
       cursor: pointer;
       box-shadow: 0 0 15px #3b82f6;
+      transition: background-color 0.2s ease, transform 0.15s ease;
     }
     button:hover {
       background: #2563eb;
+      transform: scale(1.03);
+    }
+    button:focus-visible {
+      outline: 2px solid #38bdf8;
+      outline-offset: 3px;
     }
     .popup {
       display: none;
@@ -141,6 +168,12 @@
     }
     .popup button:hover {
       background: #0284c7;
+    }
+    #popupContent {
+      margin-top: 10px;
+    }
+    #popupContent[aria-live="polite"] {
+      display: block;
     }
     #about {
       padding: 60px 20px;
@@ -184,15 +217,15 @@
     <label for="noteInput">Your Anonymous Note</label>
     <textarea id="noteInput" placeholder="Write your anonymous note here..." aria-label="Anonymous note input"></textarea>
     <div class="button-group">
-      <button type="button" id="sendBtn">Send Note</button>
-      <button type="button" id="receiveBtn">Receive Note</button>
+      <button type="button" id="sendBtn" aria-label="Send anonymous note">Send Note</button>
+      <button type="button" id="receiveBtn" aria-label="Receive random note">Receive Note</button>
     </div>
   </header>
 
   <div id="popup" class="popup" role="dialog" aria-modal="true" aria-labelledby="popupTitle" aria-describedby="popupContent">
     <h3 id="popupTitle">Anonymous Note</h3>
-    <p id="popupContent"></p>
-    <button type="button" id="closePopup">Close</button>
+    <p id="popupContent" aria-live="polite"></p>
+    <button type="button" id="closePopup" aria-label="Close popup">Close</button>
   </div>
 
   <section id="about">
@@ -205,8 +238,8 @@
 
   <footer>
     &copy; 2025 Share A Note.com — All rights reserved. |
-    <a href="#" onclick="showModal('privacyModal')">Privacy</a> |
-    <a href="#" onclick="showModal('termsModal')">Terms</a>
+    <a href="#" onclick="showModal('privacyModal')" rel="noopener">Privacy</a> |
+    <a href="#" onclick="showModal('termsModal')" rel="noopener">Terms</a>
   </footer>
 
   <div id="privacyModal" class="popup" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
@@ -328,6 +361,7 @@
     function showModal(id) {
       document.getElementById(id).style.display = 'block';
     }
+
     function hideModal(id) {
       document.getElementById(id).style.display = 'none';
     }
