@@ -153,7 +153,6 @@
     }
     window.addEventListener('resize', resizeCanvas);
     resizeCanvas();
-
     for (let i = 0; i < 200; i++) {
       stars.push({
         x: Math.random() * canvas.width,
@@ -178,6 +177,55 @@
       requestAnimationFrame(animateStars);
     }
     animateStars();
+
+    const BACKEND_URL = 'https://shareanote-backend.onrender.com';
+    const sendBtn = document.getElementById('sendBtn');
+    const receiveBtn = document.getElementById('receiveBtn');
+    const textarea = document.getElementById('noteInput');
+    const popup = document.getElementById('popup');
+    const popupTitle = document.getElementById('popupTitle');
+    const popupContent = document.getElementById('popupContent');
+
+    function showPopup(title, message) {
+      popupTitle.textContent = title;
+      popupContent.textContent = message;
+      popup.style.display = 'block';
+    }
+
+    sendBtn.addEventListener('click', () => {
+      const note = textarea.value.trim();
+      if (!note) return showPopup("Error", "Please enter a note.");
+      fetch(`${BACKEND_URL}/notes`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: note })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'success') {
+          textarea.value = '';
+          showPopup("Note Sent", "Note sent successfully!");
+        } else {
+          showPopup("Note Rejected", data.status || "Error sending note.");
+        }
+      })
+      .catch(err => {
+        showPopup("Error", "Failed to send note.");
+        console.error(err);
+      });
+    });
+
+    receiveBtn.addEventListener('click', () => {
+      fetch(`${BACKEND_URL}/notes/random`)
+        .then(res => res.json())
+        .then(data => {
+          showPopup("Note Received", data.message || "No note found.");
+        })
+        .catch(err => {
+          showPopup("Error", "Failed to retrieve note.");
+          console.error(err);
+        });
+    });
   </script>
 </body>
 </html>
