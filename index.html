@@ -69,6 +69,13 @@
       background: black;
       overflow-x: hidden;
     }
+    .sr-only {
+      position: absolute !important;
+      height: 1px; width: 1px;
+      overflow: hidden;
+      clip: rect(1px, 1px, 1px, 1px);
+      white-space: nowrap;
+    }
     canvas#stars {
       position: fixed;
       top: 0; left: 0;
@@ -172,9 +179,6 @@
     #popupContent {
       margin-top: 10px;
     }
-    #popupContent[aria-live="polite"] {
-      display: block;
-    }
     #about {
       padding: 60px 20px;
       background: #0f172a;
@@ -215,16 +219,18 @@
     <h1>Share A Note</h1>
     <p class="subtitle">Send or receive anonymous notes. No login. Just a human connection.</p>
     <label for="noteInput">Your Anonymous Note</label>
-    <textarea id="noteInput" placeholder="Write your anonymous note here..." aria-label="Anonymous note input"></textarea>
+    <textarea id="noteInput" placeholder="Write your anonymous note here..." aria-label="Anonymous note input" autocomplete="off"></textarea>
     <div class="button-group">
       <button type="button" id="sendBtn" aria-label="Send anonymous note">Send Note</button>
       <button type="button" id="receiveBtn" aria-label="Receive random note">Receive Note</button>
     </div>
   </header>
 
-  <div id="popup" class="popup" role="dialog" aria-modal="true" aria-labelledby="popupTitle" aria-describedby="popupContent">
+  <div id="popup" class="popup" role="alertdialog" aria-modal="true" aria-labelledby="popupTitle" aria-describedby="popupContent">
     <h3 id="popupTitle">Anonymous Note</h3>
-    <p id="popupContent" aria-live="polite"></p>
+    <p id="popupContent" aria-live="polite">
+      <span class="sr-only">Note content:</span>
+    </p>
     <button type="button" id="closePopup" aria-label="Close popup">Close</button>
   </div>
 
@@ -302,6 +308,7 @@
       popupTitle.textContent = title;
       popupContent.textContent = message;
       popup.style.display = 'block';
+      trapFocus(popup);
       closePopup.focus();
     }
 
@@ -310,6 +317,24 @@
         particleCount: 150,
         spread: 70,
         origin: { y: 0.6 }
+      });
+    }
+
+    function trapFocus(modal) {
+      const focusableElements = modal.querySelectorAll('button, [href], input, textarea, [tabindex]:not([tabindex="-1"])');
+      const first = focusableElements[0];
+      const last = focusableElements[focusableElements.length - 1];
+
+      modal.addEventListener('keydown', function(e) {
+        if (e.key === 'Tab') {
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
       });
     }
 
@@ -355,11 +380,20 @@
     });
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') popup.style.display = 'none';
+      if (e.key === 'Escape') {
+        const modals = document.querySelectorAll('.popup');
+        modals.forEach(modal => {
+          if (modal.style.display === 'block') modal.style.display = 'none';
+        });
+      }
     });
 
     function showModal(id) {
-      document.getElementById(id).style.display = 'block';
+      const modal = document.getElementById(id);
+      modal.style.display = 'block';
+      trapFocus(modal);
+      const focusable = modal.querySelector('button, [href], [tabindex]:not([tabindex="-1"])');
+      if (focusable) focusable.focus();
     }
 
     function hideModal(id) {
