@@ -3,32 +3,42 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-  <!-- ✅ SEO Title & Description -->
   <title>Share A Note – Send & Receive Anonymous Messages Instantly</title>
   <meta name="description" content="Share A Note is a safe, anonymous platform to send or receive notes worldwide. No login, no tracking—just human connection.">
-
-  <!-- ✅ Google Site Verification -->
   <meta name="google-site-verification" content="google4179691d1eb22dd9" />
-
-  <!-- ✅ Social Sharing Tags -->
-  <meta property="og:title" content="Share A Note – Anonymous Notes Without Sign Up">
-  <meta property="og:description" content="Connect with strangers by sending or receiving anonymous notes instantly. Free, private, no login.">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://shareanote.com/">
-  <meta property="og:image" content="https://shareanote.com/preview.jpg">
-
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Share A Note – Anonymous Notes Without Sign Up">
-  <meta name="twitter:description" content="Connect with strangers by sending or receiving anonymous notes instantly. Free, private, no login.">
-  <meta name="twitter:image" content="https://shareanote.com/preview.jpg">
-
-  <!-- ✅ Favicon (Optional) -->
+  <link rel="canonical" href="https://shareanote.com/" />
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
-
-  <!-- ✅ Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet"/>
 
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="Share A Note – Send Anonymous Messages Instantly" />
+  <meta property="og:description" content="Send and receive anonymous messages with no login, no tracking—just connection." />
+  <meta property="og:url" content="https://shareanote.com/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://shareanote.com/social-preview.jpg" />
+
+  <!-- Twitter Card Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Share A Note – Send Anonymous Messages Instantly">
+  <meta name="twitter:description" content="Send and receive anonymous notes online with no login or tracking.">
+  <meta name="twitter:image" content="https://shareanote.com/social-preview.jpg">
+
+  <!-- Schema Markup -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Share A Note",
+    "url": "https://shareanote.com",
+    "description": "A privacy-first platform to anonymously share and receive uplifting or expressive notes worldwide.",
+    "creator": {
+      "@type": "Organization",
+      "name": "Share A Note"
+    }
+  }
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -51,12 +61,25 @@
       font-size: 3.5rem;
       color: #60a5fa;
       text-shadow: 0 0 10px #3b82f6;
+      animation: glowPulse 3s ease-in-out infinite;
+    }
+    @keyframes glowPulse {
+      0%, 100% { text-shadow: 0 0 10px #3b82f6; }
+      50% { text-shadow: 0 0 25px #60a5fa, 0 0 35px #3b82f6; }
     }
     .subtitle {
       font-size: 1.5rem;
       margin: 10px auto 30px;
       max-width: 600px;
       color: #a5f3fc;
+    }
+    label {
+      display: block;
+      margin: 0 auto 10px;
+      max-width: 600px;
+      font-size: 1rem;
+      color: #cbd5e1;
+      text-align: left;
     }
     textarea {
       width: 90%; max-width: 600px;
@@ -136,45 +159,33 @@
       font-size: 0.9rem;
       text-align: center;
     }
+    footer a {
+      color: #60a5fa;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
   </style>
-
-  <link rel="canonical" href="https://shareanote.com/" />
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="mobile-web-app-capable" content="yes">
-  
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "Share A Note",
-  "url": "https://shareanote.com",
-  "description": "Share anonymous notes online without login. Simple, safe, human.",
-  "potentialAction": {
-    "@type": "SearchAction",
-    "target": "https://shareanote.com/?q={search_term_string}",
-    "query-input": "required name=search_term_string"
-  }
-}
-</script>
-
-
 </head>
 <body>
   <canvas id="stars"></canvas>
   <header>
     <h1>Share A Note</h1>
     <p class="subtitle">Send or receive anonymous notes. No login. Just a human connection.</p>
-    <textarea id="noteInput" aria-label="Anonymous note input" placeholder="Write your anonymous note here..."></textarea>
+    <label for="noteInput">Your Anonymous Note</label>
+    <textarea id="noteInput" placeholder="Write your anonymous note here..." aria-label="Anonymous note input"></textarea>
     <div class="button-group">
-      <button id="sendBtn">Send Note</button>
-      <button id="receiveBtn">Receive Note</button>
+      <button type="button" id="sendBtn">Send Note</button>
+      <button type="button" id="receiveBtn">Receive Note</button>
     </div>
   </header>
 
-  <div id="popup" class="popup" role="dialog" aria-live="polite">
+  <div id="popup" class="popup" role="dialog" aria-modal="true" aria-labelledby="popupTitle" aria-describedby="popupContent">
     <h3 id="popupTitle">Anonymous Note</h3>
     <p id="popupContent"></p>
-    <button onclick="document.getElementById('popup').style.display='none'">Close</button>
+    <button type="button" id="closePopup">Close</button>
   </div>
 
   <section id="about">
@@ -185,7 +196,23 @@
     <p>Everything is stored securely and filtered responsibly to ensure the site stays meaningful, positive, and abuse-free. Share A Note is the internet’s easiest way to share a human moment in a digital world.</p>
   </section>
 
-  <footer>&copy; 2025 Share A Note.com — All rights reserved.</footer>
+  <footer>
+    &copy; 2025 Share A Note.com — All rights reserved. |
+    <a href="#" onclick="showModal('privacyModal')">Privacy</a> |
+    <a href="#" onclick="showModal('termsModal')">Terms</a>
+  </footer>
+
+  <div id="privacyModal" class="popup" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
+    <h3 id="privacyTitle">Privacy Policy</h3>
+    <p>We do not collect personal data or use tracking technologies. All notes are anonymous and filtered to prevent abuse. No login is required, and we do not store IP addresses or identifying metadata.</p>
+    <button type="button" onclick="hideModal('privacyModal')">Close</button>
+  </div>
+
+  <div id="termsModal" class="popup" role="dialog" aria-modal="true" aria-labelledby="termsTitle">
+    <h3 id="termsTitle">Terms of Use</h3>
+    <p>By using Share A Note, you agree to send respectful, non-harmful messages. Threats, hate speech, and spam will be blocked. Abuse may result in rate limiting. This service is intended solely for anonymous, positive communication.</p>
+    <button type="button" onclick="hideModal('termsModal')">Close</button>
+  </div>
 
   <script>
     const canvas = document.getElementById('stars');
@@ -229,11 +256,21 @@
     const popup = document.getElementById('popup');
     const popupTitle = document.getElementById('popupTitle');
     const popupContent = document.getElementById('popupContent');
+    const closePopup = document.getElementById('closePopup');
 
     function showPopup(title, message) {
       popupTitle.textContent = title;
       popupContent.textContent = message;
       popup.style.display = 'block';
+      closePopup.focus();
+    }
+
+    function celebrate() {
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
     }
 
     sendBtn.addEventListener('click', () => {
@@ -249,6 +286,7 @@
         if (data.status === 'success') {
           textarea.value = '';
           showPopup("Note Sent", "Note sent successfully!");
+          celebrate();
         } else {
           showPopup("Note Rejected", data.status || "Error sending note.");
         }
@@ -264,12 +302,28 @@
         .then(res => res.json())
         .then(data => {
           showPopup("Note Received", data.message || "No note found.");
+          celebrate();
         })
         .catch(err => {
           showPopup("Error", "Failed to retrieve note.");
           console.error(err);
         });
     });
+
+    closePopup.addEventListener('click', () => {
+      popup.style.display = 'none';
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') popup.style.display = 'none';
+    });
+
+    function showModal(id) {
+      document.getElementById(id).style.display = 'block';
+    }
+    function hideModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
   </script>
 </body>
 </html>
