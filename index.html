@@ -15,13 +15,13 @@
   <meta property="og:title" content="Share A Note – Anonymous Notes Without Sign Up">
   <meta property="og:description" content="Connect with strangers by sending or receiving anonymous notes instantly. Free, private, no login.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://yourdomain.com/">
-  <meta property="og:image" content="https://yourdomain.com/preview.jpg">
+  <meta property="og:url" content="https://shareanote.com/">
+  <meta property="og:image" content="https://shareanote.com/preview.jpg">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Share A Note – Anonymous Notes Without Sign Up">
   <meta name="twitter:description" content="Connect with strangers by sending or receiving anonymous notes instantly. Free, private, no login.">
-  <meta name="twitter:image" content="https://yourdomain.com/preview.jpg">
+  <meta name="twitter:image" content="https://shareanote.com/preview.jpg">
 
   <!-- ✅ Favicon (Optional) -->
   <link rel="icon" href="/favicon.ico" type="image/x-icon">
@@ -137,13 +137,34 @@
       text-align: center;
     }
   </style>
+
+  <link rel="canonical" href="https://shareanote.com/" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Share A Note",
+  "url": "https://shareanote.com",
+  "description": "Share anonymous notes online without login. Simple, safe, human.",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://shareanote.com/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+
+
 </head>
 <body>
   <canvas id="stars"></canvas>
   <header>
     <h1>Share A Note</h1>
     <p class="subtitle">Send or receive anonymous notes. No login. Just a human connection.</p>
-    <textarea id="noteInput" placeholder="Write your anonymous note here..."></textarea>
+    <textarea id="noteInput" aria-label="Anonymous note input" placeholder="Write your anonymous note here..."></textarea>
     <div class="button-group">
       <button id="sendBtn">Send Note</button>
       <button id="receiveBtn">Receive Note</button>
