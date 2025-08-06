@@ -362,18 +362,22 @@
       });
     });
 
-    receiveBtn.addEventListener('click', () => {
-      fetch(`${BACKEND_URL}/notes/random`)
-        .then(res => res.json())
-        .then(data => {
-          showPopup("Note Received", data.message || "No note found.");
-          celebrate();
-        })
-        .catch(err => {
-          showPopup("Error", "Failed to retrieve note.");
-          console.error(err);
-        });
+receiveBtn.addEventListener('click', () => {
+  fetch(`${BACKEND_URL}/notes/random`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.message) {
+        showPopup("Note Received", data.message);
+        celebrate();
+      } else {
+        showPopup("Note Rejected", data.status || "Rate limit exceeded or no note available.");
+      }
+    })
+    .catch(err => {
+      showPopup("Error", "Failed to retrieve note.");
+      console.error(err);
     });
+});
 
     closePopup.addEventListener('click', () => {
       popup.style.display = 'none';
