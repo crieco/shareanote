@@ -362,13 +362,17 @@
       });
     });
 
-    receiveBtn.addEventListener('click', () => {
-      fetch(`${BACKEND_URL}/notes/random`)
-        .then(res => res.json())
-        .then(data => {
-          showPopup("Note Received", data.message || "No note found.");
-          celebrate();
-        })
+  receiveBtn.addEventListener('click', () => {
+  fetch(`${BACKEND_URL}/notes/random`)
+    .then(res => res.json())
+    .then(data => {
+      if (data.message) {
+        showPopup("Note Received", data.message);
+        celebrate();
+      } else {
+        showPopup("No Notes Yet", "There aren't any notes to receive at the moment. Try again soon!");
+      }
+    })
         .catch(err => {
           showPopup("Error", "Failed to retrieve note.");
           console.error(err);
