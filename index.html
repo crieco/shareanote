@@ -12,26 +12,271 @@
   <meta name="color-scheme" content="dark light" />
   <meta name="google-site-verification" content="google4179691d1eb22dd9" />
   <link rel="canonical" href="https://shareanote.com/" />
+
+  <!-- Icons -->
   <link rel="icon" href="/favicon.ico" type="image/x-icon" />
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
   <link rel="manifest" href="/site.webmanifest" />
+
+  <!-- Preconnect & Font -->
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preload" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
   <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap"></noscript>
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Share A Note – Send Anonymous Messages Instantly" />
+  <meta property="og:description" content="Send and receive anonymous messages with no login, no tracking—just connection." />
+  <meta property="og:url" content="https://shareanote.com/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://shareanote.com/social-preview.jpg" />
+  <meta property="og:site_name" content="Share A Note" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Share A Note – Send Anonymous Messages Instantly" />
+  <meta name="twitter:description" content="Send and receive anonymous notes online with no login or tracking." />
+  <meta name="twitter:image" content="https://shareanote.com/social-preview.jpg" />
+  <meta name="twitter:site" content="@ShareANote" />
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Share A Note",
+    "url": "https://shareanote.com",
+    "description": "A privacy-first platform to anonymously share and receive uplifting or expressive notes worldwide.",
+    "publisher": {
+      "@type": "Organization",
+      "name": "Share A Note",
+      "url": "https://shareanote.com"
+    }
+  }
+  </script>
+
+  <!-- Confetti -->
   <link rel="preload" href="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js" as="script">
   <script defer src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Orbitron', sans-serif;
+      color: #e0f7ff;
+      background: black;
+      overflow-x: hidden;
+    }
+    .sr-only {
+      position: absolute !important;
+      height: 1px; width: 1px;
+      overflow: hidden;
+      clip: rect(1px, 1px, 1px, 1px);
+      white-space: nowrap;
+    }
+    canvas#stars {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: -1;
+    }
+    header {
+      padding: 80px 20px 40px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 3.5rem;
+      color: #60a5fa;
+      text-shadow: 0 0 10px #3b82f6;
+      animation: glowPulse 3s ease-in-out infinite;
+    }
+    @keyframes glowPulse {
+      0%, 100% { text-shadow: 0 0 10px #3b82f6; }
+      50% { text-shadow: 0 0 25px #60a5fa, 0 0 35px #3b82f6; }
+    }
+    .subtitle {
+      font-size: 1.5rem;
+      margin: 10px auto 30px;
+      max-width: 600px;
+      color: #a5f3fc;
+    }
+
+    @media (max-width: 500px) {
+      h1 { font-size: 2.5rem; }
+      .subtitle { font-size: 1.2rem; }
+    }
+
+    label {
+      display: block;
+      margin: 0 auto 10px;
+      max-width: 600px;
+      font-size: 1rem;
+      color: #cbd5e1;
+      text-align: left;
+    }
+    textarea {
+      width: 90%; max-width: 600px;
+      height: 160px;
+      padding: 15px;
+      font-size: 1rem;
+      background: #0f172a;
+      border: 2px solid #3b82f6;
+      color: #e0f2fe;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #3b82f6;
+    }
+    .button-group {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+    button {
+      padding: 12px 24px;
+      background: #3b82f6;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 0 15px #3b82f6;
+      transition: background-color 0.2s ease, transform 0.15s ease;
+    }
+    button:hover {
+      background: #2563eb;
+      transform: scale(1.03);
+    }
+    button:focus-visible {
+      outline: 2px solid #38bdf8;
+      outline-offset: 3px;
+    }
+    .usage-count {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      margin-top: 8px;
+      text-align: center;
+    }
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: #1e293b;
+      padding: 20px;
+      border: 2px solid #3b82f6;
+      color: #e0f2fe;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #3b82f6;
+      z-index: 10;
+    }
+    .popup button {
+      margin-top: 15px;
+      background: #0ea5e9;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+    }
+    .popup button:hover {
+      background: #0284c7;
+    }
+    #about {
+      padding: 60px 20px;
+      background: #0f172a;
+      text-align: center;
+    }
+    #about h2 {
+      font-size: 2.5rem;
+      color: #60a5fa;
+      margin-bottom: 20px;
+    }
+    #about p {
+      font-size: 1.1rem;
+      max-width: 800px;
+      margin: 0 auto 20px;
+      color: #cbd5e1;
+      line-height: 1.6;
+    }
+    footer {
+      padding: 30px 20px;
+      background: #020617;
+      color: #94a3b8;
+      font-size: 0.9rem;
+      text-align: center;
+    }
+    footer a {
+      color: #60a5fa;
+      text-decoration: none;
+      margin: 0 10px;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+    #allDoneAnimation {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #1e293b;
+      padding: 30px;
+      border: 2px solid #3b82f6;
+      color: #e0f2fe;
+      border-radius: 12px;
+      box-shadow: 0 0 30px #3b82f6;
+      text-align: center;
+      z-index: 20;
+      animation: popIn 0.5s ease-out;
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.8) translate(-50%, -50%); }
+      to { opacity: 1; transform: scale(1) translate(-50%, -50%); }
+    }
+  </style>
 </head>
 <body>
-  <button id="sendBtn">Send Note</button>
-  <div id="sendCounter"></div>
-  <button id="receiveBtn">Receive Note</button>
-  <div id="receiveCounter"></div>
-  <textarea id="noteInput"></textarea>
-  <div id="popup"><h3 id="popupTitle"></h3><p id="popupContent"></p><button id="closePopup">Close</button></div>
+  <canvas id="stars"></canvas>
+  <header>
+    <h1>Share A Note</h1>
+    <p class="subtitle">Send or receive anonymous notes. No login. Just a human connection.</p>
+    <label for="noteInput">Your Anonymous Note</label>
+    <textarea id="noteInput" placeholder="Write your anonymous note here..." aria-label="Anonymous note input" autocomplete="off"></textarea>
+    <div class="button-group">
+      <div>
+        <button type="button" id="sendBtn" aria-label="Send anonymous note">Send Note</button>
+        <div class="usage-count" id="sendCount">3 sends left</div>
+      </div>
+      <div>
+        <button type="button" id="receiveBtn" aria-label="Receive random note">Receive Note</button>
+        <div class="usage-count" id="receiveCount">3 receives left</div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Popup Dialog -->
+  <div id="popup" class="popup" role="alertdialog" aria-modal="true" aria-labelledby="popupTitle" aria-describedby="popupContent">
+    <h3 id="popupTitle">Anonymous Note</h3>
+    <p id="popupContent" aria-live="polite"><span class="sr-only">Note content:</span></p>
+    <button type="button" id="closePopup" aria-label="Close popup">Close</button>
+  </div>
+
+  <!-- All Done Animation -->
+  <div id="allDoneAnimation">
+    <h3>You're all done!</h3>
+    <p>You've reached your limit for now. Come back in an hour ✨</p>
+    <button onclick="hideAllDone()">Okay!</button>
+  </div>
+
+  <!-- Continue with About, Footer, and JS as before -->
+
   <script>
+    const MAX_LIMIT = 3;
+    const HOUR = 60 * 60 * 1000;
     const BACKEND_URL = 'https://shareanote-backend.onrender.com';
+
     const sendBtn = document.getElementById('sendBtn');
     const receiveBtn = document.getElementById('receiveBtn');
     const textarea = document.getElementById('noteInput');
@@ -39,31 +284,31 @@
     const popupTitle = document.getElementById('popupTitle');
     const popupContent = document.getElementById('popupContent');
     const closePopup = document.getElementById('closePopup');
-    const sendCounter = document.getElementById('sendCounter');
-    const receiveCounter = document.getElementById('receiveCounter');
+    const allDoneBox = document.getElementById('allDoneAnimation');
+    const sendCount = document.getElementById('sendCount');
+    const receiveCount = document.getElementById('receiveCount');
 
-    const MAX_CLICKS = 3;
-    const ONE_HOUR = 60 * 60 * 1000;
-
-    function getRateData(type) {
-      const data = JSON.parse(localStorage.getItem(`${type}Rate`) || '{}');
-      if (!data.timestamp || Date.now() - data.timestamp > ONE_HOUR) {
-        return { count: 0, timestamp: Date.now() };
-      }
+    function getUsage(key) {
+      const data = JSON.parse(localStorage.getItem(key) || '{}');
+      const now = Date.now();
+      if (!data.timestamp || now - data.timestamp > HOUR) return { count: 0, timestamp: now };
       return data;
     }
 
-    function setRateData(type, count) {
-      const data = { count, timestamp: Date.now() };
-      localStorage.setItem(`${type}Rate`, JSON.stringify(data));
+    function incrementUsage(key) {
+      let data = getUsage(key);
+      data.count++;
+      data.timestamp = Date.now();
+      localStorage.setItem(key, JSON.stringify(data));
     }
 
-    let sendRate = getRateData('send');
-    let receiveRate = getRateData('receive');
+    function remaining(key) {
+      return Math.max(0, MAX_LIMIT - getUsage(key).count);
+    }
 
     function updateCounters() {
-      sendCounter.textContent = `You have ${Math.max(0, MAX_CLICKS - sendRate.count)} sends left`;
-      receiveCounter.textContent = `You have ${Math.max(0, MAX_CLICKS - receiveRate.count)} receives left`;
+      sendCount.textContent = `${remaining('send')} sends left`;
+      receiveCount.textContent = `${remaining('receive')} receives left`;
     }
 
     function showPopup(title, message) {
@@ -73,105 +318,58 @@
       closePopup.focus();
     }
 
-    function celebrate() {
-      confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+    function showAllDone() {
+      allDoneBox.style.display = 'block';
+      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
     }
 
-    function showDoneAnimation() {
-      const doneMsg = document.createElement('div');
-      doneMsg.textContent = 'You’re all done!';
-      doneMsg.style.position = 'fixed';
-      doneMsg.style.top = '50%';
-      doneMsg.style.left = '50%';
-      doneMsg.style.transform = 'translate(-50%, -50%) scale(0.5)';
-      doneMsg.style.background = '#0f172a';
-      doneMsg.style.padding = '20px 30px';
-      doneMsg.style.border = '2px solid #3b82f6';
-      doneMsg.style.borderRadius = '12px';
-      doneMsg.style.color = '#e0f2fe';
-      doneMsg.style.fontSize = '1.5rem';
-      doneMsg.style.zIndex = 20;
-      doneMsg.style.boxShadow = '0 0 20px #3b82f6';
-      doneMsg.style.opacity = '0';
-      doneMsg.style.transition = 'transform 0.5s ease, opacity 0.5s ease';
-
-      document.body.appendChild(doneMsg);
-      setTimeout(() => {
-        doneMsg.style.opacity = '1';
-        doneMsg.style.transform = 'translate(-50%, -50%) scale(1)';
-      }, 50);
-      setTimeout(() => {
-        doneMsg.style.opacity = '0';
-        doneMsg.style.transform = 'translate(-50%, -50%) scale(0.5)';
-      }, 3000);
-      setTimeout(() => {
-        document.body.removeChild(doneMsg);
-      }, 3500);
+    function hideAllDone() {
+      allDoneBox.style.display = 'none';
     }
 
-    sendBtn.addEventListener('click', () => {
-      if (sendRate.count >= MAX_CLICKS) {
-        showPopup("Rate Limit Reached", "You've reached the limit for sending notes.");
-        showDoneAnimation();
-        return;
-      }
-
+    sendBtn.onclick = () => {
+      if (remaining('send') <= 0) return showAllDone();
       const note = textarea.value.trim();
-      if (!note) return showPopup("Error", "Please enter a note.");
-
+      if (!note) return showPopup('Error', 'Please enter a note.');
       fetch(`${BACKEND_URL}/notes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: note })
       })
-        .then(res => res.json())
-        .then(data => {
-          if (data.status === 'success') {
-            textarea.value = '';
-            showPopup("Note Sent", "Note sent successfully!");
-            celebrate();
-            sendRate.count++;
-            setRateData('send', sendRate.count);
-            updateCounters();
-          } else {
-            showPopup("Note Rejected", data.status || "Error sending note.");
-          }
-        })
-        .catch(err => {
-          showPopup("Error", "Failed to send note.");
-          console.error(err);
-        });
-    });
-
-    receiveBtn.addEventListener('click', () => {
-      if (receiveRate.count >= MAX_CLICKS) {
-        showPopup("Rate Limit Reached", "You've reached the limit for receiving notes.");
-        showDoneAnimation();
-        return;
-      }
-
-      fetch(`${BACKEND_URL}/notes/random`)
-        .then(res => res.json())
-        .then(data => {
-          showPopup("Note Received", data.message || "No note found.");
-          celebrate();
-          receiveRate.count++;
-          setRateData('receive', receiveRate.count);
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'success') {
+          textarea.value = '';
+          incrementUsage('send');
           updateCounters();
-        })
-        .catch(err => {
-          showPopup("Error", "Failed to retrieve note.");
-          console.error(err);
-        });
-    });
+          showPopup('Note Sent', 'Note sent successfully!');
+          confetti();
+        } else {
+          showPopup('Error', data.status);
+        }
+      })
+      .catch(() => showPopup('Error', 'Failed to send note.'));
+    };
 
-    closePopup.addEventListener('click', () => {
-      popup.style.display = 'none';
-    });
+    receiveBtn.onclick = () => {
+      if (remaining('receive') <= 0) return showAllDone();
+      fetch(`${BACKEND_URL}/notes/random`)
+      .then(res => res.json())
+      .then(data => {
+        incrementUsage('receive');
+        updateCounters();
+        showPopup('Note Received', data.message || 'No note found.');
+        confetti();
+      })
+      .catch(() => showPopup('Error', 'Failed to retrieve note.'));
+    };
+
+    closePopup.onclick = () => popup.style.display = 'none';
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
         popup.style.display = 'none';
+        hideAllDone();
       }
     });
 
