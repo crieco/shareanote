@@ -370,7 +370,7 @@
         showPopup("Note Received", data.message);
         celebrate();
       } else {
-        showPopup("No Notes Yet", "There aren't any notes to receive at the moment. Try again soon!");
+        showPopup("Note Limit Reached", "There aren't anymore notes to receive at the moment. Try again soon!");
       }
     })
         .catch(err => {
