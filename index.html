@@ -131,8 +131,7 @@
       margin-top: 20px;
       display: flex;
       justify-content: center;
-      gap: 40px;
-      flex-wrap: wrap;
+      gap: 20px;
     }
     button {
       padding: 12px 24px;
@@ -152,12 +151,6 @@
     button:focus-visible {
       outline: 2px solid #38bdf8;
       outline-offset: 3px;
-    }
-    .usage-count {
-      font-size: 0.9rem;
-      color: #94a3b8;
-      margin-top: 8px;
-      text-align: center;
     }
     .popup {
       display: none;
@@ -182,6 +175,9 @@
     }
     .popup button:hover {
       background: #0284c7;
+    }
+    #popupContent {
+      margin-top: 10px;
     }
     #about {
       padding: 60px 20px;
@@ -215,26 +211,6 @@
     footer a:hover {
       text-decoration: underline;
     }
-    #allDoneAnimation {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #1e293b;
-      padding: 30px;
-      border: 2px solid #3b82f6;
-      color: #e0f2fe;
-      border-radius: 12px;
-      box-shadow: 0 0 30px #3b82f6;
-      text-align: center;
-      z-index: 20;
-      animation: popIn 0.5s ease-out;
-    }
-    @keyframes popIn {
-      from { opacity: 0; transform: scale(0.8) translate(-50%, -50%); }
-      to { opacity: 1; transform: scale(1) translate(-50%, -50%); }
-    }
   </style>
 </head>
 <body>
@@ -245,38 +221,81 @@
     <label for="noteInput">Your Anonymous Note</label>
     <textarea id="noteInput" placeholder="Write your anonymous note here..." aria-label="Anonymous note input" autocomplete="off"></textarea>
     <div class="button-group">
-      <div>
-        <button type="button" id="sendBtn" aria-label="Send anonymous note">Send Note</button>
-        <div class="usage-count" id="sendCount">3 sends left</div>
-      </div>
-      <div>
-        <button type="button" id="receiveBtn" aria-label="Receive random note">Receive Note</button>
-        <div class="usage-count" id="receiveCount">3 receives left</div>
-      </div>
+      <button type="button" id="sendBtn" aria-label="Send anonymous note">Send Note</button>
+      <button type="button" id="receiveBtn" aria-label="Receive random note">Receive Note</button>
     </div>
   </header>
 
-  <!-- Popup Dialog -->
   <div id="popup" class="popup" role="alertdialog" aria-modal="true" aria-labelledby="popupTitle" aria-describedby="popupContent">
     <h3 id="popupTitle">Anonymous Note</h3>
-    <p id="popupContent" aria-live="polite"><span class="sr-only">Note content:</span></p>
+    <p id="popupContent" aria-live="polite">
+      <span class="sr-only">Note content:</span>
+    </p>
     <button type="button" id="closePopup" aria-label="Close popup">Close</button>
   </div>
 
-  <!-- All Done Animation -->
-  <div id="allDoneAnimation">
-    <h3>You're all done!</h3>
-    <p>You've reached your limit for now. Come back in an hour ✨</p>
-    <button onclick="hideAllDone()">Okay!</button>
+  <section id="about">
+    <h2>About Share A Note</h2>
+    <p>Share A Note.com is a secure, anonymous, and human-centered online platform that allows you to share and receive notes with others around the world.</p>
+    <p>Built with privacy and empathy in mind, Share A Note is perfect for spreading encouragement, expressing hidden thoughts, or simply making someone’s day—without revealing your identity. No login required. No tracking. Just connection, clarity, and compassion.</p>
+    <p>Use Share A Note to share messages of hope, surprise strangers with kind words, or even vent anonymously in a safe digital space. Our platform is protected with profanity, threat, and spam detection to maintain a respectful environment for all users.</p>
+    <p>Everything is stored securely and filtered responsibly to ensure the site stays meaningful, positive, and abuse-free. Share A Note is the internet’s easiest way to share a human moment in a digital world.</p>
+  </section>
+
+  <footer>
+    &copy; 2025 Share A Note.com — All rights reserved. |
+    <a href="#" onclick="showModal('privacyModal')" rel="noopener">Privacy</a> |
+    <a href="#" onclick="showModal('termsModal')" rel="noopener">Terms</a>
+  </footer>
+
+  <div id="privacyModal" class="popup" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
+    <h3 id="privacyTitle">Privacy Policy</h3>
+    <p>We do not collect personal data or use tracking technologies. All notes are anonymous and filtered to prevent abuse. No login is required, and we do not store IP addresses or identifying metadata.</p>
+    <button type="button" onclick="hideModal('privacyModal')">Close</button>
   </div>
 
-  <!-- Continue with About, Footer, and JS as before -->
+  <div id="termsModal" class="popup" role="dialog" aria-modal="true" aria-labelledby="termsTitle">
+    <h3 id="termsTitle">Terms of Use</h3>
+    <p>By using Share A Note, you agree to send respectful, non-harmful messages. Threats, hate speech, and spam will be blocked. Abuse may result in rate limiting. This service is intended solely for anonymous, positive communication.</p>
+    <button type="button" onclick="hideModal('termsModal')">Close</button>
+  </div>
 
   <script>
-    const MAX_LIMIT = 3;
-    const HOUR = 60 * 60 * 1000;
-    const BACKEND_URL = 'https://shareanote-backend.onrender.com';
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d');
+    let stars = [];
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    for (let i = 0; i < 200; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 1.5,
+        speed: Math.random() * 0.5 + 0.2
+      });
+    }
+    function animateStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#60a5fa';
+      for (let star of stars) {
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.radius, 0, 2 * Math.PI);
+        ctx.fill();
+        star.y += star.speed;
+        if (star.y > canvas.height) {
+          star.y = 0;
+          star.x = Math.random() * canvas.width;
+        }
+      }
+      requestAnimationFrame(animateStars);
+    }
+    animateStars();
 
+    const BACKEND_URL = 'https://shareanote-backend.onrender.com';
     const sendBtn = document.getElementById('sendBtn');
     const receiveBtn = document.getElementById('receiveBtn');
     const textarea = document.getElementById('noteInput');
@@ -284,53 +303,44 @@
     const popupTitle = document.getElementById('popupTitle');
     const popupContent = document.getElementById('popupContent');
     const closePopup = document.getElementById('closePopup');
-    const allDoneBox = document.getElementById('allDoneAnimation');
-    const sendCount = document.getElementById('sendCount');
-    const receiveCount = document.getElementById('receiveCount');
-
-    function getUsage(key) {
-      const data = JSON.parse(localStorage.getItem(key) || '{}');
-      const now = Date.now();
-      if (!data.timestamp || now - data.timestamp > HOUR) return { count: 0, timestamp: now };
-      return data;
-    }
-
-    function incrementUsage(key) {
-      let data = getUsage(key);
-      data.count++;
-      data.timestamp = Date.now();
-      localStorage.setItem(key, JSON.stringify(data));
-    }
-
-    function remaining(key) {
-      return Math.max(0, MAX_LIMIT - getUsage(key).count);
-    }
-
-    function updateCounters() {
-      sendCount.textContent = `${remaining('send')} sends left`;
-      receiveCount.textContent = `${remaining('receive')} receives left`;
-    }
 
     function showPopup(title, message) {
       popupTitle.textContent = title;
       popupContent.textContent = message;
       popup.style.display = 'block';
+      trapFocus(popup);
       closePopup.focus();
     }
 
-    function showAllDone() {
-      allDoneBox.style.display = 'block';
-      confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+    function celebrate() {
+      confetti({
+        particleCount: 150,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
     }
 
-    function hideAllDone() {
-      allDoneBox.style.display = 'none';
+    function trapFocus(modal) {
+      const focusableElements = modal.querySelectorAll('button, [href], input, textarea, [tabindex]:not([tabindex="-1"])');
+      const first = focusableElements[0];
+      const last = focusableElements[focusableElements.length - 1];
+
+      modal.addEventListener('keydown', function(e) {
+        if (e.key === 'Tab') {
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      });
     }
 
-    sendBtn.onclick = () => {
-      if (remaining('send') <= 0) return showAllDone();
+    sendBtn.addEventListener('click', () => {
       const note = textarea.value.trim();
-      if (!note) return showPopup('Error', 'Please enter a note.');
+      if (!note) return showPopup("Error", "Please enter a note.");
       fetch(`${BACKEND_URL}/notes`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -340,40 +350,55 @@
       .then(data => {
         if (data.status === 'success') {
           textarea.value = '';
-          incrementUsage('send');
-          updateCounters();
-          showPopup('Note Sent', 'Note sent successfully!');
-          confetti();
+          showPopup("Note Sent", "Note sent successfully!");
+          celebrate();
         } else {
-          showPopup('Error', data.status);
+          showPopup("Note Rejected", data.status || "Error sending note.");
         }
       })
-      .catch(() => showPopup('Error', 'Failed to send note.'));
-    };
+      .catch(err => {
+        showPopup("Error", "Failed to send note.");
+        console.error(err);
+      });
+    });
 
-    receiveBtn.onclick = () => {
-      if (remaining('receive') <= 0) return showAllDone();
+    receiveBtn.addEventListener('click', () => {
       fetch(`${BACKEND_URL}/notes/random`)
-      .then(res => res.json())
-      .then(data => {
-        incrementUsage('receive');
-        updateCounters();
-        showPopup('Note Received', data.message || 'No note found.');
-        confetti();
-      })
-      .catch(() => showPopup('Error', 'Failed to retrieve note.'));
-    };
+        .then(res => res.json())
+        .then(data => {
+          showPopup("Note Received", data.message || "No note found.");
+          celebrate();
+        })
+        .catch(err => {
+          showPopup("Error", "Failed to retrieve note.");
+          console.error(err);
+        });
+    });
 
-    closePopup.onclick = () => popup.style.display = 'none';
+    closePopup.addEventListener('click', () => {
+      popup.style.display = 'none';
+    });
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
-        popup.style.display = 'none';
-        hideAllDone();
+        const modals = document.querySelectorAll('.popup');
+        modals.forEach(modal => {
+          if (modal.style.display === 'block') modal.style.display = 'none';
+        });
       }
     });
 
-    updateCounters();
+    function showModal(id) {
+      const modal = document.getElementById(id);
+      modal.style.display = 'block';
+      trapFocus(modal);
+      const focusable = modal.querySelector('button, [href], [tabindex]:not([tabindex="-1"])');
+      if (focusable) focusable.focus();
+    }
+
+    function hideModal(id) {
+      document.getElementById(id).style.display = 'none';
+    }
   </script>
 </body>
 </html>
