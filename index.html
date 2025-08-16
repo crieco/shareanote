@@ -6,7 +6,6 @@
   <title>Share A Note – Send & Receive Anonymous Messages Instantly</title>
   <meta name="description" content="Share A Note is a secure, anonymous platform to send and receive notes instantly with no login or tracking. A safe space for connection, clarity, and compassion." />
   <meta name="robots" content="index, follow" />
-  <meta name="keywords" content="anonymous notes, share a note, no login messages, private messaging, anonymous message board, safe messaging, secure notes" />
   <meta name="author" content="Share A Note Team" />
   <meta name="theme-color" content="#0f172a" />
   <meta name="color-scheme" content="dark light" />
@@ -32,6 +31,7 @@
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://shareanote.com/social-preview.jpg" />
   <meta property="og:site_name" content="Share A Note" />
+  <meta property="og:locale" content="en_US" />
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
@@ -40,7 +40,7 @@
   <meta name="twitter:image" content="https://shareanote.com/social-preview.jpg" />
   <meta name="twitter:site" content="@ShareANote" />
 
-  <!-- Structured Data -->
+  <!-- Structured Data: WebSite -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -99,7 +99,7 @@
     .subtitle {
       font-size: 1.5rem;
       margin: 10px auto 30px;
-      max-width: 600px;
+      max-width: 700px;
       color: #a5f3fc;
     }
 
@@ -132,6 +132,7 @@
       display: flex;
       justify-content: center;
       gap: 20px;
+      flex-wrap: wrap;
     }
     button {
       padding: 12px 24px;
@@ -164,6 +165,8 @@
       border-radius: 12px;
       box-shadow: 0 0 20px #3b82f6;
       z-index: 10;
+      max-width: 90%;
+      width: 520px;
     }
     .popup button {
       margin-top: 15px;
@@ -178,23 +181,37 @@
     }
     #popupContent {
       margin-top: 10px;
+      word-break: break-word;
     }
-    #about {
+    #about, #faq {
       padding: 60px 20px;
-      background: #0f172a;
       text-align: center;
     }
-    #about h2 {
+    #about {
+      background: #0f172a;
+    }
+    #faq {
+      background: #0b1224;
+    }
+    #about h2, #faq h2 {
       font-size: 2.5rem;
       color: #60a5fa;
       margin-bottom: 20px;
     }
-    #about p {
+    #about p, #faq p {
       font-size: 1.1rem;
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto 20px;
       color: #cbd5e1;
       line-height: 1.6;
+      text-align: left;
+    }
+    #faq h3 {
+      font-size: 1.25rem;
+      color: #a5f3fc;
+      margin: 20px auto 8px;
+      max-width: 900px;
+      text-align: left;
     }
     footer {
       padding: 30px 20px;
@@ -217,7 +234,12 @@
   <canvas id="stars"></canvas>
   <header>
     <h1>Share A Note</h1>
-    <p class="subtitle">Send or receive anonymous notes. No login. Just a human connection.</p>
+    <p class="subtitle">
+      Share a note online—send or receive anonymous notes instantly. No login. No tracking. Just a human connection.
+    </p>
+
+    <h2 class="sr-only">Share a Note Online—Free, Anonymous, Instant</h2>
+
     <label for="noteInput">Your Anonymous Note</label>
     <textarea id="noteInput" placeholder="Write your anonymous note here..." aria-label="Anonymous note input" autocomplete="off"></textarea>
     <div class="button-group">
@@ -236,18 +258,54 @@
 
   <section id="about">
     <h2>About Share A Note</h2>
-    <p>Share A Note.com is a secure, anonymous, and human-centered online platform that allows you to share and receive notes with others around the world.</p>
-    <p>Built with privacy and empathy in mind, Share A Note is perfect for spreading encouragement, expressing hidden thoughts, or simply making someone’s day—without revealing your identity. No login required. No tracking. Just connection, clarity, and compassion.</p>
-    <p>Use Share A Note to share messages of hope, surprise strangers with kind words, or even vent anonymously in a safe digital space. Our platform is protected with profanity, threat, and spam detection to maintain a respectful environment for all users.</p>
-    <p>Everything is stored securely and filtered responsibly to ensure the site stays meaningful, positive, and abuse-free. Share A Note is the internet’s easiest way to share a human moment in a digital world.</p>
+    <p>
+      Share A Note is a secure, anonymous, and human-centered platform to <strong>share a note</strong> with anyone, anywhere. It’s the fastest way to post or receive messages without creating an account.
+    </p>
+    <p>
+      Built with privacy and empathy in mind, Share A Note lets you <strong>share a note</strong> to spread encouragement, express hidden thoughts, or make someone’s day—without revealing your identity. No login. No tracking. Just connection, clarity, and compassion.
+    </p>
+    <p>
+      Use Share A Note to share messages of hope, surprise strangers with kind words, or even vent anonymously in a safe digital space. Our platform is protected with profanity, threat, and spam detection to maintain a respectful environment for all users.
+    </p>
+    <p>
+      Everything is stored securely and filtered responsibly to ensure the site stays meaningful, positive, and abuse-free. Share A Note is the internet’s easiest way to share a human moment in a digital world.
+    </p>
+  </section>
+
+  <section id="faq">
+    <h2>Share a Note — Frequently Asked Questions</h2>
+
+    <h3>What does “share a note” mean here?</h3>
+    <p>It means you can post or receive an anonymous message instantly—no account or login required.</p>
+
+    <h3>Is sharing a note really anonymous?</h3>
+    <p>Yes. We don’t require logins and we don’t store identifying metadata like IP addresses.</p>
+
+    <h3>How do I receive a random note?</h3>
+    <p>Use the “Receive Note” button above. You’ll get a randomly selected, previously submitted note.</p>
+
+    <h3>Is Share A Note moderated?</h3>
+    <p>Yes. We use profanity, threat, and spam detection to keep the experience positive and safe.</p>
   </section>
 
   <footer>
-    &copy; 2025 Share A Note.com — All rights reserved. |
-    <a href="#" onclick="showModal('privacyModal')" rel="noopener">Privacy</a> |
-    <a href="#" onclick="showModal('termsModal')" rel="noopener">Terms</a>
+    &copy; 2025 Share A Note — All rights reserved. |
+    <a href="#privacy" onclick="showModal('privacyModal')" rel="noopener">Privacy</a> |
+    <a href="#terms" onclick="showModal('termsModal')" rel="noopener">Terms</a>
   </footer>
 
+  <!-- Crawlable (hidden) legal sections for bots and accessibility -->
+  <section id="privacy" class="sr-only" aria-hidden="true">
+    <h2>Privacy Policy</h2>
+    <p>We do not collect personal data or use tracking technologies. All notes are anonymous and filtered to prevent abuse. No login is required, and we do not store IP addresses or identifying metadata.</p>
+  </section>
+
+  <section id="terms" class="sr-only" aria-hidden="true">
+    <h2>Terms of Use</h2>
+    <p>By using Share A Note, you agree to send respectful, non-harmful messages. Threats, hate speech, and spam are blocked. Abuse may result in rate limiting. This service is intended solely for anonymous, positive communication.</p>
+  </section>
+
+  <!-- Existing modal UX -->
   <div id="privacyModal" class="popup" role="dialog" aria-modal="true" aria-labelledby="privacyTitle">
     <h3 id="privacyTitle">Privacy Policy</h3>
     <p>We do not collect personal data or use tracking technologies. All notes are anonymous and filtered to prevent abuse. No login is required, and we do not store IP addresses or identifying metadata.</p>
@@ -259,6 +317,48 @@
     <p>By using Share A Note, you agree to send respectful, non-harmful messages. Threats, hate speech, and spam will be blocked. Abuse may result in rate limiting. This service is intended solely for anonymous, positive communication.</p>
     <button type="button" onclick="hideModal('termsModal')">Close</button>
   </div>
+
+  <!-- Structured Data: FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What does “share a note” mean on Share A Note?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "You can post or receive an anonymous message instantly—no account or login required."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is sharing a note really anonymous?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. We don’t require logins and we don’t store identifying metadata like IP addresses."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I receive a random note?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Click the “Receive Note” button to fetch a randomly selected, previously submitted note."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Share A Note moderated?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. We use profanity, threat, and spam detection to keep the experience positive and safe."
+        }
+      }
+    ]
+  }
+  </script>
 
   <script>
     const canvas = document.getElementById('stars');
@@ -362,17 +462,17 @@
       });
     });
 
-  receiveBtn.addEventListener('click', () => {
-  fetch(`${BACKEND_URL}/notes/random`)
-    .then(res => res.json())
-    .then(data => {
-      if (data.message) {
-        showPopup("Note Received", data.message);
-        celebrate();
-      } else {
-        showPopup("Note Limit Reached", "There aren't anymore notes to receive at the moment. Try again soon!");
-      }
-    })
+    receiveBtn.addEventListener('click', () => {
+      fetch(`${BACKEND_URL}/notes/random`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.message) {
+            showPopup("Note Received", data.message);
+            celebrate();
+          } else {
+            showPopup("Note Limit Reached", "There aren't anymore notes to receive at the moment. Try again soon!");
+          }
+        })
         .catch(err => {
           showPopup("Error", "Failed to retrieve note.");
           console.error(err);
