@@ -1,0 +1,6 @@
+# Force everything to use https://shareanote.com/
+http://shareanote.com/*    https://shareanote.com/:splat   301!
+https://www.shareanote.com/*    https://shareanote.com/:splat   301!
+
+# Remove /index.html and redirect to root
+/index.html    /    301!
